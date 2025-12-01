@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <title>Cài đặt Rewards Helper AI</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <aside class="sidebar">
+    <h2>Rewards AI</h2>
+    <nav id="sidebar-nav">
+      <ul>
+        <li><a href="#" data-section="general" class="active">Chung</a></li>
+        <li><a href="#" data-section="ai_settings">Cấu hình AI</a></li>
+        <li><a href="#" data-section="schedule">Lên lịch</a></li>
+        <li><a href="#" data-section="logs">Nhật ký</a></li>
+      </ul>
+    </nav>
+  </aside>
+
+  <main class="content">
+    <div id="general" class="content-section active">
+      <h1>Cài đặt chung</h1>
+      
+      <div class="form-group">
+        <label>Chế độ chạy:</label>
+        <div class="radio-group">
+           <label><input type="checkbox" id="runInBackground"> Chạy ngầm (Tab không Active)</label>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label>Thiết bị giả lập (Kiếm điểm Mobile):</label>
+        <div class="radio-group">
+           <label><input type="checkbox" id="useMobileUserAgent"> Bật chế độ Mobile (iPhone/Android)</label>
+        </div>
+        <div class="hint">
+          <strong>Lưu ý:</strong> Khi bật, tool sẽ giả danh là iPhone để Bing tính điểm tìm kiếm trên điện thoại. 
+          Nếu muốn kiếm điểm PC, hãy bỏ tích ô này.
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="tabsToOpen">Số lượng tìm kiếm:</label>
+        <input type="number" id="tabsToOpen" min="1" max="100" value="30">
+      </div>
+
+      <div class="form-group">
+        <label>Tốc độ tìm kiếm (Delay):</label>
+        <div class="radio-group">
+          <label><input type="radio" name="delayMode" value="random" checked> Ngẫu nhiên (Khuyên dùng)</label>
+          <label><input type="radio" name="delayMode" value="fixed"> Cố định</label>
+        </div>
+        <div id="fixedDelaySetting" style="margin-top: 10px; display: none;">
+          <input type="number" id="fixedDelaySeconds" min="1" value="5"> giây
+        </div>
+      </div>
+      <button id="saveGeneral">Lưu Cài đặt chung</button>
+    </div>
+
+    <div id="ai_settings" class="content-section">
+      <h1>Cấu hình AI (Gemini)</h1>
+      <div class="form-group">
+        <label>Gemini API Key:</label>
+        <input type="password" id="apiKey" placeholder="Dán khóa API của bạn vào đây..." style="width: 100%;">
+        <div class="hint">
+          <a href="https://aistudio.google.com/app/apikey" target="_blank">Lấy API Key miễn phí tại đây</a>.
+          Nếu không nhập Key, tool sẽ dùng danh sách từ khóa tĩnh cũ.
+        </div>
+      </div>
+      <div class="form-group">
+        <label>Chủ đề AI tập trung (Tùy chọn):</label>
+        <input type="text" id="aiTopic" placeholder="Ví dụ: Du lịch, Công nghệ, Nấu ăn...">
+        <div class="hint">Nếu để trống, AI sẽ tự chọn chủ đề ngẫu nhiên mỗi ngày.</div>
+      </div>
+      <button id="saveAI">Lưu Cấu hình AI</button>
+    </div>
+
+    <div id="schedule" class="content-section">
+      <h1>Tự động chạy</h1>
+      <div class="form-group">
+        <div class="radio-group"><label><input type="checkbox" id="enableSchedule"> Bật tự động chạy</label></div>
+        <label>Thời gian bắt đầu:</label>
+        <input type="time" id="scheduledTime">
+      </div>
+      <button id="saveSchedule">Lưu Lịch trình</button>
+    </div>
+
+    <div id="logs" class="content-section">
+      <h1>Nhật ký</h1>
+      <div class="form-group">
+        <table id="runLogsTable"><thead><tr><th>Thời gian</th><th>Nguồn</th><th>Chế độ</th><th>Số lượng</th></tr></thead><tbody></tbody></table>
+      </div>
+      <button id="clearLogs" class="secondary">Xóa nhật ký</button>
+    </div>
+
+    <div id="status"></div>
+  </main>
+  <script src="options.js"></script>
+</body>
+</html>

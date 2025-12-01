@@ -1,0 +1,26 @@
+body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; background: #f0f2f5; margin: 0; }
+.sidebar { width: 220px; background: #fff; padding: 20px; display: flex; flex-direction: column; box-shadow: 2px 0 5px rgba(0,0,0,0.05); position: fixed; height: 100%; top: 0; left: 0; }
+.sidebar h2 { color: #0078D4; margin-top: 0; text-align: center; font-size: 18px; border-bottom: 2px solid #f0f2f5; padding-bottom: 10px; }
+.sidebar ul { list-style: none; padding: 0; }
+.sidebar li a { display: block; padding: 12px; color: #4b4f56; text-decoration: none; border-radius: 6px; font-weight: 500; margin-bottom: 4px; transition: 0.2s; }
+.sidebar li a:hover { background: #f0f2f5; }
+.sidebar li a.active { background: #e7f3fe; color: #0078D4; font-weight: bold; }
+.content { margin-left: 260px; padding: 30px 50px; }
+.content-section { display: none; }
+.content-section.active { display: block; animation: fadeIn 0.3s; }
+@keyframes fadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
+
+.form-group { margin-bottom: 24px; background: #fff; padding: 20px; border-radius: 8px; border: 1px solid #dddfe2; box-shadow: 0 1px 2px rgba(0,0,0,0.05); }
+label { display: block; margin-bottom: 8px; font-weight: 600; color: #1c1e21; }
+input[type="number"], input[type="time"] { padding: 8px 12px; border: 1px solid #ccd0d5; border-radius: 4px; font-size: 14px; }
+textarea { width: 100%; border: 1px solid #ccd0d5; border-radius: 4px; padding: 10px; box-sizing: border-box; font-family: inherit; }
+.radio-group label { display: inline-flex; align-items: center; margin-right: 20px; font-weight: normal; cursor: pointer; }
+.radio-group input { margin-right: 8px; }
+button { background: #0078D4; color: white; border: none; padding: 10px 20px; border-radius: 6px; font-weight: 600; cursor: pointer; transition: background 0.2s; }
+button:hover { background: #005a9e; }
+button.secondary { background: #e4e6eb; color: #050505; }
+button.secondary:hover { background: #d8dadf; }
+.hint { font-size: 13px; color: #65676b; margin-top: 6px; }
+#status { position: fixed; bottom: 20px; right: 20px; background: #333; color: white; padding: 10px 20px; border-radius: 4px; display: none; z-index: 100; }
+table { width: 100%; border-collapse: collapse; }
+th, td { padding: 10px; border-bottom: 1px solid #eee; text-align: left; }

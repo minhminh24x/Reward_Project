@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <title>Rewards Helper</title>
+  <link rel="stylesheet" href="styles.css">
+  <style>
+    body { width: 280px; padding: 0; margin: 0; background: #f9f9f9; }
+    .container { padding: 15px; text-align: center; }
+    .status-box { background: #fff; padding: 15px; border-radius: 8px; margin-bottom: 15px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
+    #statusDisplay { font-weight: bold; font-size: 16px; color: #333; }
+    .btn-group { display: flex; gap: 10px; flex-direction: column; }
+    button { padding: 10px; font-weight: bold; color: white; border: none; border-radius: 5px; cursor: pointer; }
+    #startBtn { background: #27ae60; }
+    #stopBtn { background: #c0392b; display: none; }
+    #optionsBtn { background: #34495e; margin-top: 5px; }
+    .progress-bar { height: 6px; background: #eee; border-radius: 3px; margin-top: 10px; overflow: hidden; display: none;}
+    .progress-fill { height: 100%; background: #27ae60; width: 0%; transition: width 0.3s; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="status-box">
+      <div id="statusDisplay">Sẵn sàng</div>
+      <div class="progress-bar" id="progressWrap">
+        <div class="progress-fill" id="progressBar"></div>
+      </div>
+      <div id="progressText" style="font-size: 12px; color: #777; margin-top: 5px;"></div>
+    </div>
+    <div class="btn-group">
+      <button id="startBtn">Bắt đầu chạy</button>
+      <button id="stopBtn">Dừng lại</button>
+      <button id="optionsBtn">Cài đặt</button>
+    </div>
+  </div>
+  <script src="popup.js"></script>
+</body>
+</html>
