@@ -1,12 +1,12 @@
 /**
- * Microsoft Rewards Helper Ultra Pro v4.0
- * Stealth Edition - Advanced Anti-Detection
+ * Microsoft Rewards Helper Ultra Pro v4.1.0
+ * Stealth Edition - Deep Anti-Detection
  * 
  * Features:
  * - PC/Mobile/Both mode selection
- * - Advanced fingerprint protection
+ * - Deep fingerprint protection (Canvas, WebGL, Touch, Battery, WebRTC)
  * - Human-like behavior simulation
- * - Multiple device profiles
+ * - Multiple device profiles (15+)
  * - Smart timing & scheduling
  * - AI-powered keyword generation (Gemini)
  */
@@ -147,71 +147,223 @@ async function setUserAgent(mode, deviceProfile = null) {
 }
 
 // ============================================================
-// ANTI-DETECTION INJECTION
+// ANTI-DETECTION INJECTION (v2.0 - Deep Spoofing)
 // ============================================================
 async function injectAntiDetection(tabId, isMobile, deviceProfile = null) {
     const settings = await chrome.storage.local.get(['antiDetection']);
-    const options = settings.antiDetection || CONFIG.ANTI_DETECTION;
+    const userOptions = settings.antiDetection || {};
 
-    // Canvas spoofing
-    if (options.canvasSpoof) {
-        await injectScript(tabId, `
+    // Merge with defaults
+    const options = {
+        canvas: userOptions.canvas !== false,
+        webgl: userOptions.webgl !== false,
+        audio: userOptions.audio !== false,
+        navigator: userOptions.navigatorSpoof !== false,
+        touch: userOptions.touch !== false,
+        screen: userOptions.screenSpoof !== false,
+        battery: userOptions.battery !== false,
+        timezone: true,
+        webrtc: userOptions.webrtc !== false,
+        timing: true,
+        fonts: true
+    };
+
+    // Use the ANTI_DETECTION module scripts
+    const scripts = [];
+
+    // Canvas Protection
+    if (options.canvas) {
+        scripts.push(`
             (function() {
-                const originalToDataURL = HTMLCanvasElement.prototype.toDataURL;
+                const _toDataURL = HTMLCanvasElement.prototype.toDataURL;
+                const _toBlob = HTMLCanvasElement.prototype.toBlob;
+                const noiseKey = Math.random();
+                function addNoise(canvas, ctx) {
+                    try {
+                        const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+                        for (let i = 0; i < imageData.data.length; i += 4) {
+                            if (imageData.data[i + 3] > 0) {
+                                imageData.data[i] += ((noiseKey * (i + 1)) % 1 - 0.5) * 2;
+                            }
+                        }
+                        ctx.putImageData(imageData, 0, 0);
+                    } catch(e) {}
+                }
                 HTMLCanvasElement.prototype.toDataURL = function(...args) {
                     const ctx = this.getContext('2d');
-                    if (ctx) {
-                        try {
-                            const imageData = ctx.getImageData(0, 0, this.width, this.height);
-                            for (let i = 0; i < imageData.data.length; i += 4) {
-                                if (imageData.data[i + 3] > 0) {
-                                    imageData.data[i] = Math.max(0, Math.min(255, 
-                                        imageData.data[i] + Math.floor((Math.random() - 0.5) * 2)));
-                                }
-                            }
-                            ctx.putImageData(imageData, 0, 0);
-                        } catch(e) {}
-                    }
-                    return originalToDataURL.apply(this, args);
+                    if (ctx) addNoise(this, ctx);
+                    return _toDataURL.apply(this, args);
                 };
+                console.log('🎨 Canvas protection active');
             })();
         `);
     }
 
-    // Navigator spoofing
-    if (options.navigatorSpoof) {
-        const hw = isMobile ? pick([4, 6, 8]) : pick([8, 12, 16]);
+    // WebGL Protection
+    if (options.webgl) {
+        const gpus = [
+            ['Google Inc. (NVIDIA)', 'ANGLE (NVIDIA, NVIDIA GeForce RTX 4090 Direct3D11 vs_5_0 ps_5_0, D3D11)'],
+            ['Google Inc. (Intel)', 'ANGLE (Intel, Intel(R) Iris(R) Xe Graphics Direct3D11 vs_5_0 ps_5_0, D3D11)'],
+            ['Apple Inc.', 'Apple M3 Pro']
+        ];
+        const gpu = pick(gpus);
+        scripts.push(`
+            (function() {
+                const VENDOR = '${gpu[0]}';
+                const RENDERER = '${gpu[1]}';
+                function spoofGetParameter(original) {
+                    return function(pname) {
+                        if (pname === 37445) return VENDOR;
+                        if (pname === 37446) return RENDERER;
+                        return original.call(this, pname);
+                    };
+                }
+                if (WebGLRenderingContext) {
+                    WebGLRenderingContext.prototype.getParameter = spoofGetParameter(WebGLRenderingContext.prototype.getParameter);
+                }
+                if (typeof WebGL2RenderingContext !== 'undefined') {
+                    WebGL2RenderingContext.prototype.getParameter = spoofGetParameter(WebGL2RenderingContext.prototype.getParameter);
+                }
+                console.log('🎮 WebGL protection active');
+            })();
+        `);
+    }
+
+    // Navigator Deep Spoofing
+    if (options.navigator) {
+        const hw = isMobile ? pick([4, 6, 8]) : pick([8, 12, 16, 20]);
         const mem = isMobile ? pick([4, 6, 8]) : pick([8, 16, 32]);
-        const touch = isMobile ? 5 : 0;
+        const touch = isMobile ? pick([5, 10]) : 0;
+        const platform = isMobile ? (deviceProfile?.platform || 'iPhone') : 'Win32';
 
-        await injectScript(tabId, `
+        scripts.push(`
             (function() {
-                Object.defineProperty(navigator, 'hardwareConcurrency', { get: () => ${hw} });
-                Object.defineProperty(navigator, 'deviceMemory', { get: () => ${mem} });
-                Object.defineProperty(navigator, 'maxTouchPoints', { get: () => ${touch} });
-                Object.defineProperty(navigator, 'webdriver', { get: () => false });
+                const props = {
+                    hardwareConcurrency: ${hw},
+                    deviceMemory: ${mem},
+                    maxTouchPoints: ${touch},
+                    platform: '${platform}',
+                    webdriver: false,
+                    pdfViewerEnabled: ${!isMobile},
+                    languages: ${JSON.stringify(isMobile ? ['en-US', 'en'] : ['en-US', 'en', 'vi'])},
+                    language: 'en-US'
+                };
+                Object.keys(props).forEach(key => {
+                    try { Object.defineProperty(navigator, key, { get: () => props[key], configurable: true }); } catch(e) {}
+                });
+                delete navigator.__proto__.webdriver;
+                console.log('🧭 Navigator protection active');
             })();
         `);
     }
 
-    // Screen spoofing for mobile
-    if (options.screenSpoof && isMobile && deviceProfile) {
-        const { width, height, devicePixelRatio } = deviceProfile.screen
-            ? { ...deviceProfile.screen, devicePixelRatio: deviceProfile.devicePixelRatio }
-            : { width: 393, height: 852, devicePixelRatio: 3 };
-
-        await injectScript(tabId, `
+    // Touch Events (Mobile Critical)
+    if (options.touch && isMobile) {
+        const maxTouch = deviceProfile?.platform === 'iPhone' ? 5 : 10;
+        scripts.push(`
             (function() {
-                Object.defineProperty(window, 'innerWidth', { get: () => ${width} });
-                Object.defineProperty(window, 'innerHeight', { get: () => ${height} });
-                Object.defineProperty(window.screen, 'width', { get: () => ${width} });
-                Object.defineProperty(window.screen, 'height', { get: () => ${height} });
-                Object.defineProperty(window, 'devicePixelRatio', { get: () => ${devicePixelRatio} });
+                Object.defineProperty(navigator, 'maxTouchPoints', { get: () => ${maxTouch}, configurable: true });
+                if (!('ontouchstart' in window)) window.ontouchstart = null;
+                const _matchMedia = window.matchMedia;
+                window.matchMedia = function(query) {
+                    const result = _matchMedia.call(window, query);
+                    if (query.includes('pointer: coarse') || query.includes('hover: none')) {
+                        return { matches: true, media: query, addListener: () => {}, removeListener: () => {}, addEventListener: () => {}, removeEventListener: () => {} };
+                    }
+                    if (query.includes('pointer: fine')) {
+                        return { matches: false, media: query, addListener: () => {}, removeListener: () => {}, addEventListener: () => {}, removeEventListener: () => {} };
+                    }
+                    return result;
+                };
+                console.log('👆 Touch support active');
             })();
         `);
     }
 
-    console.log('✅ Anti-detection injected');
+    // Screen Spoofing (Mobile)
+    if (options.screen && isMobile && deviceProfile) {
+        const w = deviceProfile.screen?.width || 390;
+        const h = deviceProfile.screen?.height || 844;
+        const dpr = deviceProfile.devicePixelRatio || 3;
+
+        scripts.push(`
+            (function() {
+                Object.defineProperty(window, 'innerWidth', { get: () => ${w}, configurable: true });
+                Object.defineProperty(window, 'innerHeight', { get: () => ${h}, configurable: true });
+                Object.defineProperty(window, 'devicePixelRatio', { get: () => ${dpr}, configurable: true });
+                Object.defineProperty(screen, 'width', { get: () => ${w}, configurable: true });
+                Object.defineProperty(screen, 'height', { get: () => ${h}, configurable: true });
+                Object.defineProperty(screen, 'availWidth', { get: () => ${w}, configurable: true });
+                Object.defineProperty(screen, 'availHeight', { get: () => ${h - 20}, configurable: true });
+                console.log('📱 Screen spoofing active: ${w}x${h}');
+            })();
+        `);
+    }
+
+    // Battery API (Mobile)
+    if (options.battery && isMobile) {
+        const level = (Math.random() * 0.5 + 0.3).toFixed(2);
+        const charging = Math.random() > 0.6;
+        scripts.push(`
+            (function() {
+                navigator.getBattery = () => Promise.resolve({
+                    charging: ${charging},
+                    chargingTime: ${charging ? randInt(1000, 3600) : Infinity},
+                    dischargingTime: ${!charging ? randInt(5000, 15000) : Infinity},
+                    level: ${level},
+                    addEventListener: () => {},
+                    removeEventListener: () => {}
+                });
+                console.log('🔋 Battery API spoofed');
+            })();
+        `);
+    }
+
+    // WebRTC Protection
+    if (options.webrtc) {
+        scripts.push(`
+            (function() {
+                if (window.RTCPeerConnection) {
+                    const _RTC = window.RTCPeerConnection;
+                    window.RTCPeerConnection = function(...args) {
+                        const pc = new _RTC(...args);
+                        const _addIceCandidate = pc.addIceCandidate.bind(pc);
+                        pc.addIceCandidate = function(candidate) {
+                            if (candidate && candidate.candidate && candidate.candidate.includes('.local')) {
+                                return Promise.resolve();
+                            }
+                            return _addIceCandidate(candidate);
+                        };
+                        return pc;
+                    };
+                }
+                if (navigator.mediaDevices && navigator.mediaDevices.enumerateDevices) {
+                    navigator.mediaDevices.enumerateDevices = () => Promise.resolve([]);
+                }
+                console.log('🔒 WebRTC protection active');
+            })();
+        `);
+    }
+
+    // Timing Noise
+    if (options.timing) {
+        scripts.push(`
+            (function() {
+                const _now = performance.now.bind(performance);
+                const offset = Math.random() * 100;
+                performance.now = function() { return _now() + offset + (Math.random() * 0.1); };
+                console.log('⏱️ Timing protection active');
+            })();
+        `);
+    }
+
+    // Inject all scripts
+    for (const script of scripts) {
+        await injectScript(tabId, script);
+    }
+
+    const protections = scripts.length;
+    console.log(`✅ Anti-detection v2.0 injected (${protections} protections)`);
 }
 
 async function injectScript(tabId, code) {
