@@ -1,8 +1,8 @@
 {
   "manifest_version": 3,
-  "name": "Rewards Helper Pro (AI Edition)",
-  "version": "3.1.0",
-  "description": "Tự động hóa Bing Search với trí tuệ nhân tạo Gemini + Giả lập Mobile.",
+  "name": "Rewards Ultra Pro (Stealth Edition)",
+  "version": "4.0.0",
+  "description": "Tự động hóa Bing Search với AI Gemini, chống phát hiện nâng cao, hỗ trợ PC/Mobile.",
   "permissions": [
     "storage",
     "alarms",
@@ -15,7 +15,12 @@
     "https://generativelanguage.googleapis.com/*"
   ],
   "action": {
-    "default_popup": "popup.html"
+    "default_popup": "popup.html",
+    "default_icon": {
+      "16": "icons/icon16.png",
+      "48": "icons/icon48.png",
+      "128": "icons/icon128.png"
+    }
   },
   "background": {
     "service_worker": "background.js"

@@ -1,101 +1,421 @@
 <!DOCTYPE html>
 <html lang="vi">
+
 <head>
   <meta charset="UTF-8">
-  <title>Cài đặt Rewards Helper AI</title>
+  <title>Cài đặt - Rewards Ultra Pro</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="styles.css">
 </head>
+
 <body>
+  <!-- Animated Background -->
+  <div class="bg-orbs">
+    <div class="orb orb-1"></div>
+    <div class="orb orb-2"></div>
+    <div class="orb orb-3"></div>
+  </div>
+
   <aside class="sidebar">
-    <h2>Rewards AI</h2>
+    <div class="sidebar-header">
+      <div class="logo-wrap">
+        <div class="logo-icon pulse">⚡</div>
+        <div>
+          <div class="logo-text">Ultra Pro</div>
+          <div class="logo-version">v4.1.0 Stealth</div>
+        </div>
+      </div>
+    </div>
     <nav id="sidebar-nav">
       <ul>
-        <li><a href="#" data-section="general" class="active">Chung</a></li>
-        <li><a href="#" data-section="ai_settings">Cấu hình AI</a></li>
-        <li><a href="#" data-section="schedule">Lên lịch</a></li>
-        <li><a href="#" data-section="logs">Nhật ký</a></li>
+        <li><a href="#" data-section="dashboard" class="active"><span class="nav-icon">📊</span> Dashboard</a></li>
+        <li><a href="#" data-section="search_mode"><span class="nav-icon">🎯</span> Chế độ Search</a></li>
+        <li><a href="#" data-section="anti_detection"><span class="nav-icon">🛡️</span> Anti-Detection</a></li>
+        <li><a href="#" data-section="ai_settings"><span class="nav-icon">🤖</span> AI Config</a></li>
+        <li><a href="#" data-section="schedule"><span class="nav-icon">📅</span> Lịch trình</a></li>
+        <li><a href="#" data-section="logs"><span class="nav-icon">📝</span> Nhật ký</a></li>
       </ul>
     </nav>
+    <div class="sidebar-footer">
+      <div class="shield-status">
+        <div class="shield-icon">🛡️</div>
+        <div class="shield-info">
+          <div class="shield-label">Stealth Mode</div>
+          <div class="shield-value active">Active</div>
+        </div>
+      </div>
+    </div>
   </aside>
 
   <main class="content">
-    <div id="general" class="content-section active">
-      <h1>Cài đặt chung</h1>
-      
-      <div class="form-group">
-        <label>Chế độ chạy:</label>
-        <div class="radio-group">
-           <label><input type="checkbox" id="runInBackground"> Chạy ngầm (Tab không Active)</label>
+    <!-- DASHBOARD -->
+    <div id="dashboard" class="content-section active">
+      <div class="page-header">
+        <h1>📊 Dashboard</h1>
+        <p class="subtitle">Tổng quan hoạt động của bạn</p>
+      </div>
+
+      <!-- Stats Cards -->
+      <div class="stats-cards">
+        <div class="stat-card glass">
+          <div class="stat-card-header">
+            <span class="stat-icon">🔍</span>
+            <span class="stat-trend up">+12%</span>
+          </div>
+          <div class="stat-value" id="statTotalSearches">0</div>
+          <div class="stat-label">Tổng Searches</div>
+          <div class="stat-bar">
+            <div class="stat-bar-fill" style="width: 75%"></div>
+          </div>
+        </div>
+
+        <div class="stat-card glass">
+          <div class="stat-card-header">
+            <span class="stat-icon">💰</span>
+            <span class="stat-trend up">+8%</span>
+          </div>
+          <div class="stat-value gradient-text" id="statEstimatedPoints">0</div>
+          <div class="stat-label">Điểm ước tính</div>
+          <div class="stat-bar">
+            <div class="stat-bar-fill accent" style="width: 60%"></div>
+          </div>
+        </div>
+
+        <div class="stat-card glass">
+          <div class="stat-card-header">
+            <span class="stat-icon">📅</span>
+          </div>
+          <div class="stat-value" id="statDaysActive">0</div>
+          <div class="stat-label">Ngày hoạt động</div>
+          <div class="stat-bar">
+            <div class="stat-bar-fill success" style="width: 45%"></div>
+          </div>
+        </div>
+
+        <div class="stat-card glass">
+          <div class="stat-card-header">
+            <span class="stat-icon">🤖</span>
+          </div>
+          <div class="stat-value" id="statAIUsage">0%</div>
+          <div class="stat-label">AI Keywords</div>
+          <div class="stat-bar">
+            <div class="stat-bar-fill purple" style="width: 80%"></div>
+          </div>
         </div>
       </div>
 
-      <div class="form-group">
-        <label>Thiết bị giả lập (Kiếm điểm Mobile):</label>
-        <div class="radio-group">
-           <label><input type="checkbox" id="useMobileUserAgent"> Bật chế độ Mobile (iPhone/Android)</label>
+      <!-- Chart Section -->
+      <div class="chart-section glass">
+        <div class="chart-header">
+          <h3>📈 Hoạt động 7 ngày qua</h3>
+          <div class="chart-legend">
+            <span class="legend-item"><span class="legend-dot pc"></span> PC</span>
+            <span class="legend-item"><span class="legend-dot mobile"></span> Mobile</span>
+          </div>
         </div>
-        <div class="hint">
-          <strong>Lưu ý:</strong> Khi bật, tool sẽ giả danh là iPhone để Bing tính điểm tìm kiếm trên điện thoại. 
-          Nếu muốn kiếm điểm PC, hãy bỏ tích ô này.
-        </div>
+        <div class="chart-container" id="weeklyChart"></div>
       </div>
 
-      <div class="form-group">
-        <label for="tabsToOpen">Số lượng tìm kiếm:</label>
-        <input type="number" id="tabsToOpen" min="1" max="100" value="30">
-      </div>
-
-      <div class="form-group">
-        <label>Tốc độ tìm kiếm (Delay):</label>
-        <div class="radio-group">
-          <label><input type="radio" name="delayMode" value="random" checked> Ngẫu nhiên (Khuyên dùng)</label>
-          <label><input type="radio" name="delayMode" value="fixed"> Cố định</label>
+      <!-- Quick Actions -->
+      <div class="quick-actions glass">
+        <h3>⚡ Quick Actions</h3>
+        <div class="action-buttons">
+          <button class="action-btn" id="quickStartBoth">
+            <span class="action-icon">🔄</span>
+            <span class="action-text">Chạy Both</span>
+          </button>
+          <button class="action-btn" id="quickStartPC">
+            <span class="action-icon">💻</span>
+            <span class="action-text">Chạy PC</span>
+          </button>
+          <button class="action-btn" id="quickStartMobile">
+            <span class="action-icon">📱</span>
+            <span class="action-text">Chạy Mobile</span>
+          </button>
         </div>
-        <div id="fixedDelaySetting" style="margin-top: 10px; display: none;">
-          <input type="number" id="fixedDelaySeconds" min="1" value="5"> giây
-        </div>
       </div>
-      <button id="saveGeneral">Lưu Cài đặt chung</button>
     </div>
 
+    <!-- SEARCH MODE -->
+    <div id="search_mode" class="content-section">
+      <div class="page-header">
+        <h1>🎯 Chế độ Tìm kiếm</h1>
+        <p class="subtitle">Tùy chỉnh cách thức search</p>
+      </div>
+
+      <div class="card glass">
+        <div class="mode-selector-grid">
+          <div class="mode-card" data-mode="both">
+            <div class="mode-card-icon">🔄</div>
+            <div class="mode-card-content">
+              <div class="mode-card-title">Both (PC + Mobile)</div>
+              <div class="mode-card-desc">Chạy cả PC và Mobile, tối đa điểm nhận được</div>
+              <div class="mode-card-points">~150 điểm/ngày</div>
+            </div>
+            <div class="mode-card-check">✓</div>
+          </div>
+
+          <div class="mode-card" data-mode="pc_only">
+            <div class="mode-card-icon">💻</div>
+            <div class="mode-card-content">
+              <div class="mode-card-title">PC Only</div>
+              <div class="mode-card-desc">Chỉ chạy tìm kiếm PC</div>
+              <div class="mode-card-points">~90 điểm/ngày</div>
+            </div>
+            <div class="mode-card-check">✓</div>
+          </div>
+
+          <div class="mode-card" data-mode="mobile_only">
+            <div class="mode-card-icon">📱</div>
+            <div class="mode-card-content">
+              <div class="mode-card-title">Mobile Only</div>
+              <div class="mode-card-desc">Chỉ chạy tìm kiếm Mobile</div>
+              <div class="mode-card-points">~60 điểm/ngày</div>
+            </div>
+            <div class="mode-card-check">✓</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card glass">
+        <h3>📊 Số lượng Search</h3>
+        <div class="input-grid-2">
+          <div class="input-group">
+            <label>💻 PC Searches</label>
+            <div class="input-with-range">
+              <input type="range" id="pcSearchRange" min="20" max="40" value="30">
+              <input type="number" id="pcSearchCount" min="20" max="40" value="30">
+            </div>
+            <span class="input-hint">Max ~90 điểm (30 searches)</span>
+          </div>
+          <div class="input-group">
+            <label>📱 Mobile Searches</label>
+            <div class="input-with-range">
+              <input type="range" id="mobileSearchRange" min="15" max="30" value="20">
+              <input type="number" id="mobileSearchCount" min="15" max="30" value="20">
+            </div>
+            <span class="input-hint">Max ~60 điểm (20 searches)</span>
+          </div>
+        </div>
+        <button class="btn-save" id="saveSearchMode">💾 Lưu cài đặt</button>
+      </div>
+    </div>
+
+    <!-- ANTI-DETECTION -->
+    <div id="anti_detection" class="content-section">
+      <div class="page-header">
+        <h1>🛡️ Anti-Detection</h1>
+        <p class="subtitle">Bảo vệ chống phát hiện tiên tiến</p>
+      </div>
+
+      <div class="protection-grid">
+        <div class="protection-card glass">
+          <div class="protection-header">
+            <span class="protection-icon">🎨</span>
+            <span class="protection-name">Canvas Fingerprint</span>
+            <label class="toggle">
+              <input type="checkbox" id="canvasSpoof" checked>
+              <span class="toggle-slider"></span>
+            </label>
+          </div>
+          <p class="protection-desc">Thêm noise vào canvas để tạo fingerprint duy nhất mỗi session</p>
+        </div>
+
+        <div class="protection-card glass">
+          <div class="protection-header">
+            <span class="protection-icon">🎮</span>
+            <span class="protection-name">WebGL Spoofing</span>
+            <label class="toggle">
+              <input type="checkbox" id="webglSpoof" checked>
+              <span class="toggle-slider"></span>
+            </label>
+          </div>
+          <p class="protection-desc">Giả lập GPU khác nhau để qua mặt WebGL detection</p>
+        </div>
+
+        <div class="protection-card glass">
+          <div class="protection-header">
+            <span class="protection-icon">🔊</span>
+            <span class="protection-name">Audio Context</span>
+            <label class="toggle">
+              <input type="checkbox" id="audioSpoof" checked>
+              <span class="toggle-slider"></span>
+            </label>
+          </div>
+          <p class="protection-desc">Bảo vệ AudioContext fingerprint</p>
+        </div>
+
+        <div class="protection-card glass">
+          <div class="protection-header">
+            <span class="protection-icon">👆</span>
+            <span class="protection-name">Touch Events</span>
+            <label class="toggle">
+              <input type="checkbox" id="touchSpoof" checked>
+              <span class="toggle-slider"></span>
+            </label>
+          </div>
+          <p class="protection-desc">Giả lập touch support cho mobile mode</p>
+        </div>
+
+        <div class="protection-card glass">
+          <div class="protection-header">
+            <span class="protection-icon">🔋</span>
+            <span class="protection-name">Battery API</span>
+            <label class="toggle">
+              <input type="checkbox" id="batterySpoof" checked>
+              <span class="toggle-slider"></span>
+            </label>
+          </div>
+          <p class="protection-desc">Giả lập thông tin pin thiết bị</p>
+        </div>
+
+        <div class="protection-card glass">
+          <div class="protection-header">
+            <span class="protection-icon">🔒</span>
+            <span class="protection-name">WebRTC Shield</span>
+            <label class="toggle">
+              <input type="checkbox" id="webrtcSpoof" checked>
+              <span class="toggle-slider"></span>
+            </label>
+          </div>
+          <p class="protection-desc">Chặn WebRTC IP leak</p>
+        </div>
+      </div>
+
+      <div class="card glass">
+        <h3>🖱️ Hành vi giả người</h3>
+        <div class="behavior-toggles">
+          <label class="behavior-item">
+            <input type="checkbox" id="humanScroll" checked>
+            <span class="behavior-icon">📜</span>
+            <span class="behavior-text">Cuộn trang tự nhiên</span>
+          </label>
+          <label class="behavior-item">
+            <input type="checkbox" id="clickResults" checked>
+            <span class="behavior-icon">👆</span>
+            <span class="behavior-text">Click ngẫu nhiên kết quả (30%)</span>
+          </label>
+          <label class="behavior-item">
+            <input type="checkbox" id="mouseMovement" checked>
+            <span class="behavior-icon">🖱️</span>
+            <span class="behavior-text">Giả lập di chuột</span>
+          </label>
+          <label class="behavior-item">
+            <input type="checkbox" id="smartTiming" checked>
+            <span class="behavior-icon">⏰</span>
+            <span class="behavior-text">Tránh chạy 2-6 AM</span>
+          </label>
+        </div>
+        <button class="btn-save" id="saveAntiDetection">💾 Lưu cài đặt</button>
+      </div>
+    </div>
+
+    <!-- AI SETTINGS -->
     <div id="ai_settings" class="content-section">
-      <h1>Cấu hình AI (Gemini)</h1>
-      <div class="form-group">
-        <label>Gemini API Key:</label>
-        <input type="password" id="apiKey" placeholder="Dán khóa API của bạn vào đây..." style="width: 100%;">
-        <div class="hint">
-          <a href="https://aistudio.google.com/app/apikey" target="_blank">Lấy API Key miễn phí tại đây</a>.
-          Nếu không nhập Key, tool sẽ dùng danh sách từ khóa tĩnh cũ.
+      <div class="page-header">
+        <h1>🤖 AI Configuration</h1>
+        <p class="subtitle">Cấu hình Gemini AI cho keyword generation</p>
+      </div>
+
+      <div class="card glass">
+        <div class="ai-status" id="aiStatusCard">
+          <div class="ai-status-icon">🔴</div>
+          <div class="ai-status-text">
+            <div class="ai-status-title">AI Status</div>
+            <div class="ai-status-value" id="aiStatusValue">Chưa cấu hình</div>
+          </div>
+        </div>
+
+        <div class="input-group">
+          <label>🔑 Gemini API Key</label>
+          <div class="input-with-icon">
+            <input type="password" id="apiKey" placeholder="Paste your API key here...">
+            <button class="input-btn" id="toggleApiKey">👁️</button>
+          </div>
+          <span class="input-hint">
+            <a href="https://aistudio.google.com/app/apikey" target="_blank">🔗 Lấy API Key miễn phí</a>
+          </span>
+        </div>
+
+        <div class="input-group">
+          <label>🎯 Chủ đề AI (Tùy chọn)</label>
+          <input type="text" id="aiTopic" placeholder="VD: Du lịch, Công nghệ, Nấu ăn...">
+          <span class="input-hint">Để trống = AI tự chọn chủ đề ngẫu nhiên</span>
+        </div>
+
+        <button class="btn-save" id="saveAI">💾 Lưu</button>
+      </div>
+    </div>
+
+    <!-- SCHEDULE -->
+    <div id="schedule" class="content-section">
+      <div class="page-header">
+        <h1>📅 Lịch trình tự động</h1>
+        <p class="subtitle">Tự động chạy hàng ngày</p>
+      </div>
+
+      <div class="card glass">
+        <div class="schedule-toggle">
+          <div class="schedule-info">
+            <div class="schedule-icon">⏰</div>
+            <div>
+              <div class="schedule-title">Tự động chạy hàng ngày</div>
+              <div class="schedule-desc">Bật để tool tự chạy vào thời gian đã đặt</div>
+            </div>
+          </div>
+          <label class="toggle big">
+            <input type="checkbox" id="enableSchedule">
+            <span class="toggle-slider"></span>
+          </label>
+        </div>
+
+        <div class="time-picker">
+          <label>Thời gian bắt đầu</label>
+          <input type="time" id="scheduledTime" value="09:00">
+          <span class="input-hint">Tool sẽ thêm delay ngẫu nhiên ±60 phút</span>
+        </div>
+
+        <button class="btn-save" id="saveSchedule">💾 Lưu lịch trình</button>
+      </div>
+    </div>
+
+    <!-- LOGS -->
+    <div id="logs" class="content-section">
+      <div class="page-header">
+        <h1>📝 Nhật ký hoạt động</h1>
+        <p class="subtitle">Lịch sử các phiên chạy</p>
+      </div>
+
+      <div class="card glass">
+        <div class="logs-header">
+          <div class="logs-count">
+            <span id="logsCount">0</span> bản ghi
+          </div>
+          <button class="btn-danger-sm" id="clearLogs">🗑️ Xóa tất cả</button>
+        </div>
+
+        <div class="logs-table-wrap">
+          <table class="logs-table" id="runLogsTable">
+            <thead>
+              <tr>
+                <th>Thời gian</th>
+                <th>Nguồn</th>
+                <th>Mode</th>
+                <th>Device</th>
+                <th>Count</th>
+              </tr>
+            </thead>
+            <tbody></tbody>
+          </table>
         </div>
       </div>
-      <div class="form-group">
-        <label>Chủ đề AI tập trung (Tùy chọn):</label>
-        <input type="text" id="aiTopic" placeholder="Ví dụ: Du lịch, Công nghệ, Nấu ăn...">
-        <div class="hint">Nếu để trống, AI sẽ tự chọn chủ đề ngẫu nhiên mỗi ngày.</div>
-      </div>
-      <button id="saveAI">Lưu Cấu hình AI</button>
     </div>
 
-    <div id="schedule" class="content-section">
-      <h1>Tự động chạy</h1>
-      <div class="form-group">
-        <div class="radio-group"><label><input type="checkbox" id="enableSchedule"> Bật tự động chạy</label></div>
-        <label>Thời gian bắt đầu:</label>
-        <input type="time" id="scheduledTime">
-      </div>
-      <button id="saveSchedule">Lưu Lịch trình</button>
-    </div>
-
-    <div id="logs" class="content-section">
-      <h1>Nhật ký</h1>
-      <div class="form-group">
-        <table id="runLogsTable"><thead><tr><th>Thời gian</th><th>Nguồn</th><th>Chế độ</th><th>Số lượng</th></tr></thead><tbody></tbody></table>
-      </div>
-      <button id="clearLogs" class="secondary">Xóa nhật ký</button>
-    </div>
-
-    <div id="status"></div>
+    <!-- Toast -->
+    <div id="toast" class="toast"></div>
   </main>
+
   <script src="options.js"></script>
 </body>
+
 </html>
