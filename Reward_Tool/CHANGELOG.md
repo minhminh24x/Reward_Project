@@ -6,13 +6,78 @@ Tất cả thay đổi đáng chú ý của dự án sẽ được ghi lại tro
 
 | Loại thay đổi | Ví dụ | Cách tăng version |
 |---------------|-------|-------------------|
-| 🐛 Bug fixes / Sửa lỗi nhỏ | Fix typo, sửa css | `4.1.0` → `4.1.1` |
-| ✨ Features / Nâng cấp | Thêm tính năng mới | `4.1.0` → `4.2.0` |
-| 🔥 Breaking / Lột xác | Viết lại hoàn toàn | `4.1.0` → `5.0.0` |
+| 🐛 Bug fixes / Sửa lỗi nhỏ | Fix typo, sửa css | `2.1.0` → `2.1.1` |
+| ✨ Features / Nâng cấp | Thêm tính năng mới | `2.1.0` → `2.2.0` |
+| 🔥 Breaking / Lột xác | Viết lại hoàn toàn | `2.1.0` → `3.0.0` |
 
 ---
 
-## [4.1.0] - 2026-02-09
+## [2.3.1] - 2026-02-10
+
+### 🐛 Critical Fix: Mobile Search Points
+- **Mobile URL Parameters**: Sửa lỗi mobile search không lên điểm
+  - ✅ Thêm `PC=SANSAAND` (key mobile identifier)
+  - ✅ Dùng `form=BABTAA` thay vì PC form codes
+  - ✅ Thêm `cc=vn`, `ssp=1`, `setlang=vi`
+  - 📊 Based on real mobile device URL analysis
+- **Trước**: `form=QBRE&qs=n&sp=9` (PC parameters)
+- **Sau**: `PC=SANSAAND&form=BABTAA&cc=vn&ssp=1` (Mobile parameters)
+- **Tab Error Fix**: Bỏ tab existence check để tránh crash
+
+### ⚠️ QUAN TRỌNG
+Giờ mobile search sẽ được Microsoft Rewards công nhận và lên điểm chính xác!
+
+---
+
+## [2.3.0] - 2026-02-10
+
+### 🎨 UI Upgrade: Side Panel (Sidebar)
+- **Side Panel**: Extension giờ mở ở sidebar bên cạnh
+  - Không còn popup dropdown nhỏ
+  - Full-height sidebar, resize được
+  - Không tự đóng khi click ra ngoài
+  - Theo dõi tiến độ dễ dàng hơn
+- **Files mới**:
+  - `sidepanel.html`: UI cho sidebar
+  - `sidepanel-styles.css`: Styles tối ưu sidebar
+  - `sidepanel.js`: Logic điều khiển
+- **Manifest**: Thêm `side_panel` config và `sidePanel` permission
+
+---
+
+## [2.2.0] - 2026-02-10
+
+### 🐛 Bug Fixes
+- **Search Loop**: Không còn dừng sau 5 lần search
+  - Error recovery nếu tab bị đóng ngoài ý muốn
+  - Chi tiết logging: `🔍 Search X/Y: keyword...`
+- **Auto-Close Tab**: Tab tự đóng đúng cách
+  - Double-check tab tồn tại trước khi close
+  - Delay 2s mặc định
+- **Stop Button**: Dừng ngay lập tức
+  - Check `stopRequested` sau mỗi iteration
+  - Tab đóng ngay khi nhấn Stop
+  - Reset state sau 1s
+
+### 🎨 UI Redesign
+- **Popup**: Slider-style design mới
+  - Loại bỏ orb background
+  - Button to, dễ nhấn hơn
+  - Layout đơn giản, rõ ràng
+
+---
+
+## [2.1.1] - 2026-02-09
+
+### ✨ Features mới
+- **Auto-close Tab**: Tab search tự động đóng sau khi session kết thúc
+  - Toggle bật/tắt trong Settings → Chế độ Search
+  - Delay 1-10 giây có thể điều chỉnh
+  - Console log chi tiết: `🗑️ Closing tab in Xs...`
+
+---
+
+## [2.1.0] - 2026-02-09
 
 ### 🔥 Lột xác Anti-Detection Engine v2.0
 - Canvas fingerprint với session-consistent noise
@@ -50,7 +115,7 @@ Tất cả thay đổi đáng chú ý của dự án sẽ được ghi lại tro
 
 ---
 
-## [4.0.0] - 2026-02-09
+## [2.0.0] - 2026-02-09
 
 ### ✨ Tính năng mới
 - Anti-Detection Engine v1.0
@@ -76,7 +141,7 @@ Tất cả thay đổi đáng chú ý của dự án sẽ được ghi lại tro
 
 ---
 
-## [3.0.0] - 2026-02-08
+## [1.0.0] - 2026-02-08
 
 ### ✨ Phiên bản gốc
 - Basic PC/Mobile search
@@ -84,27 +149,3 @@ Tất cả thay đổi đáng chú ý của dự án sẽ được ghi lại tro
 - Gemini AI keyword generation
 - Simple scheduling
 - Basic User-Agent switching
-
----
-
-## 📁 Files được thay đổi
-
-### v4.1.0
-| File | Lines | Description |
-|------|-------|-------------|
-| `anti-detection.js` | 450+ | Complete rewrite v2.0 |
-| `popup.html` | 290 | Glassmorphism redesign |
-| `popup.js` | 170 | Animated counters |
-| `options.html` | 350 | Dashboard + settings |
-| `options.js` | 300 | Chart rendering |
-| `styles.css` | 750 | Premium CSS |
-| `CHANGELOG.md` | NEW | Version tracking |
-
-### v4.0.0
-| File | Lines | Description |
-|------|-------|-------------|
-| `anti-detection.js` | NEW | Anti-detection engine |
-| `device-profiles.js` | NEW | Device configurations |
-| `background.js` | 600+ | Core logic rewrite |
-| `manifest.json` | 35 | Updated permissions |
-| `topics.json` | 175+ | Expanded keywords |

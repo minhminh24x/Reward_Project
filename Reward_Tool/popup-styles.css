@@ -1,0 +1,325 @@
+/**
+ * Popup Styles - Rewards Ultra Pro v4.2
+ * Simplified Slider Design
+ */
+
+/* ============================================================
+   POPUP SPECIFIC STYLES
+   ============================================================ */
+.popup-body {
+    width: 360px;
+    min-height: 520px;
+    background: #1a1a2e;
+    margin: 0;
+    padding: 0;
+    font-family: 'Inter', -apple-system, sans-serif;
+    color: #f1f5f9;
+}
+
+.popup-container {
+    padding: 20px;
+}
+
+/* Header */
+.popup-header {
+    margin-bottom: 20px;
+}
+
+.popup-logo {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.popup-logo-icon {
+    width: 48px;
+    height: 48px;
+    background: linear-gradient(135deg, #6366f1, #8b5cf6);
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 26px;
+}
+
+.popup-title {
+    font-size: 18px;
+    font-weight: 700;
+    color: #f1f5f9;
+}
+
+.popup-version {
+    font-size: 11px;
+    color: #64748b;
+    margin-top: 2px;
+}
+
+/* Status */
+.popup-status {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 16px;
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 12px;
+    margin-bottom: 16px;
+}
+
+.status-label {
+    font-size: 11px;
+    font-weight: 600;
+    color: #64748b;
+    letter-spacing: 0.5px;
+}
+
+.status-value-wrap {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.status-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: #10b981;
+}
+
+.status-dot.running {
+    background: #f59e0b;
+    animation: pulse-dot 2s ease-in-out infinite;
+}
+
+@keyframes pulse-dot {
+
+    0%,
+    100% {
+        opacity: 1;
+    }
+
+    50% {
+        opacity: 0.5;
+    }
+}
+
+.status-text {
+    font-size: 14px;
+    font-weight: 600;
+    color: #f1f5f9;
+}
+
+/* Phase Row */
+.popup-phase {
+    display: none;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 16px;
+    background: rgba(99, 102, 241, 0.1);
+    border: 1px solid rgba(99, 102, 241, 0.2);
+    border-radius: 10px;
+    margin-bottom: 16px;
+}
+
+.phase-icon {
+    font-size: 18px;
+}
+
+.phase-text {
+    font-size: 13px;
+    font-weight: 600;
+    color: #a5b4fc;
+}
+
+/* Progress */
+.popup-progress {
+    display: none;
+    padding: 12px 16px;
+    background: rgba(255, 255, 255, 0.02);
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    border-radius: 10px;
+    margin-bottom: 16px;
+}
+
+.popup-progress.active {
+    display: block;
+}
+
+.popup-progress .progress-label {
+    font-size: 11px;
+    color: #64748b;
+    margin-bottom: 6px;
+}
+
+.popup-progress .progress-count {
+    font-size: 13px;
+    font-weight: 600;
+    color: #f1f5f9;
+    margin-bottom: 8px;
+}
+
+.progress-bar-wrap {
+    width: 100%;
+    height: 6px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+.progress-bar-fill {
+    height: 100%;
+    background: linear-gradient(90deg, #6366f1, #8b5cf6);
+    border-radius: 10px;
+    transition: width 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Section */
+.popup-section {
+    margin-bottom: 20px;
+}
+
+.section-label {
+    font-size: 11px;
+    font-weight: 600;
+    color: #64748b;
+    letter-spacing: 0.5px;
+    margin-bottom: 12px;
+}
+
+/* Mode Grid */
+.mode-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 8px;
+}
+
+.mode-btn {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    padding: 14px 8px;
+    background: rgba(255, 255, 255, 0.03);
+    border: 2px solid rgba(255, 255, 255, 0.08);
+    border-radius: 10px;
+    color: #94a3b8;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.mode-btn:hover {
+    background: rgba(255, 255, 255, 0.06);
+    border-color: rgba(99, 102, 241, 0.3);
+    transform: translateY(-2px);
+}
+
+.mode-btn.active {
+    background: rgba(99, 102, 241, 0.15);
+    border-color: #6366f1;
+    color: #f1f5f9;
+}
+
+.mode-icon {
+    font-size: 24px;
+}
+
+.mode-label {
+    font-size: 12px;
+    font-weight: 600;
+}
+
+/* Action Buttons */
+.popup-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+.action-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    padding: 16px 20px;
+    border: none;
+    border-radius: 12px;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.action-btn.primary {
+    background: linear-gradient(135deg, #6366f1, #8b5cf6);
+    color: white;
+    box-shadow: 0 4px 20px rgba(99, 102, 241, 0.3);
+}
+
+.action-btn.primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 30px rgba(99, 102, 241, 0.4);
+}
+
+.action-btn.primary:active {
+    transform: translateY(0);
+}
+
+.action-btn.danger {
+    background: linear-gradient(135deg, #ef4444, #dc2626);
+    color: white;
+    box-shadow: 0 4px 20px rgba(239, 68, 68, 0.3);
+}
+
+.action-btn.danger:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 30px rgba(239, 68, 68, 0.4);
+}
+
+.action-btn.secondary {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    color: #94a3b8;
+}
+
+.action-btn.secondary:hover {
+    background: rgba(255, 255, 255, 0.08);
+    color: #f1f5f9;
+}
+
+.btn-icon {
+    font-size: 18px;
+}
+
+.btn-text {
+    font-size: 15px;
+}
+
+/* Stats */
+.popup-stats {
+    display: flex;
+    justify-content: space-around;
+    padding: 16px;
+    background: rgba(255, 255, 255, 0.02);
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    border-radius: 12px;
+}
+
+.stat-item {
+    text-align: center;
+}
+
+.stat-value {
+    font-size: 28px;
+    font-weight: 700;
+    color: #f1f5f9;
+    margin-bottom: 4px;
+}
+
+.stat-label {
+    font-size: 10px;
+    font-weight: 600;
+    color: #64748b;
+    letter-spacing: 0.5px;
+}

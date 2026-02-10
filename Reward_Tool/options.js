@@ -27,6 +27,10 @@ const Options = {
       mobileSearchCount: document.getElementById('mobileSearchCount'),
       pcSearchRange: document.getElementById('pcSearchRange'),
       mobileSearchRange: document.getElementById('mobileSearchRange'),
+      autoCloseTab: document.getElementById('autoCloseTab'),
+      tabCloseDelay: document.getElementById('tabCloseDelay'),
+      tabCloseDelayRange: document.getElementById('tabCloseDelayRange'),
+      closeDelayGroup: document.getElementById('closeDelayGroup'),
       saveSearchMode: document.getElementById('saveSearchMode'),
 
       // Anti-Detection
@@ -120,6 +124,12 @@ const Options = {
 
     syncInputs(this.elements.pcSearchRange, this.elements.pcSearchCount);
     syncInputs(this.elements.mobileSearchRange, this.elements.mobileSearchCount);
+    syncInputs(this.elements.tabCloseDelayRange, this.elements.tabCloseDelay);
+
+    // Auto-close toggle visibility
+    this.elements.autoCloseTab?.addEventListener('change', (e) => {
+      this.toggleCloseDelayVisibility(e.target.checked);
+    });
   },
 
   async loadSettings() {
@@ -138,6 +148,17 @@ const Options = {
     if (this.elements.mobileSearchCount) {
       this.elements.mobileSearchCount.value = data.mobileSearchCount || 20;
       this.elements.mobileSearchRange.value = data.mobileSearchCount || 20;
+    }
+
+    // Auto-close tab
+    if (this.elements.autoCloseTab) {
+      this.elements.autoCloseTab.checked = data.autoCloseTab !== false;
+      this.toggleCloseDelayVisibility(data.autoCloseTab !== false);
+    }
+    if (this.elements.tabCloseDelay) {
+      const delay = (data.tabCloseDelay || 2000) / 1000;
+      this.elements.tabCloseDelay.value = delay;
+      this.elements.tabCloseDelayRange.value = delay;
     }
 
     // Anti-Detection
@@ -208,9 +229,17 @@ const Options = {
     await chrome.storage.local.set({
       searchMode: activeCard?.dataset.mode || 'both',
       pcSearchCount: parseInt(this.elements.pcSearchCount?.value || 30),
-      mobileSearchCount: parseInt(this.elements.mobileSearchCount?.value || 20)
+      mobileSearchCount: parseInt(this.elements.mobileSearchCount?.value || 20),
+      autoCloseTab: this.elements.autoCloseTab?.checked ?? true,
+      tabCloseDelay: parseInt(this.elements.tabCloseDelay?.value || 2) * 1000
     });
     this.showToast('✅ Đã lưu chế độ search!');
+  },
+
+  toggleCloseDelayVisibility(show) {
+    if (this.elements.closeDelayGroup) {
+      this.elements.closeDelayGroup.style.display = show ? 'block' : 'none';
+    }
   },
 
   async saveAntiDetection() {

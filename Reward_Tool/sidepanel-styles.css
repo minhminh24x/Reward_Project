@@ -1,0 +1,332 @@
+/**
+ * Side Panel Styles - Rewards Ultra Pro v4.3
+ * Sidebar Optimized Design
+ */
+
+/* ============================================================
+   SIDE PANEL SPECIFIC STYLES
+   ============================================================ */
+.sidepanel-body {
+    width: 100%;
+    min-height: 100vh;
+    background: #1a1a2e;
+    margin: 0;
+    padding: 0;
+    font-family: 'Inter', -apple-system, sans-serif;
+    color: #f1f5f9;
+}
+
+.sidepanel-container {
+    padding: 24px;
+    max-width: 500px;
+    margin: 0 auto;
+}
+
+/* Header */
+.sidepanel-header {
+    margin-bottom: 24px;
+}
+
+.sidepanel-logo {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+}
+
+.sidepanel-logo-icon {
+    width: 56px;
+    height: 56px;
+    background: linear-gradient(135deg, #6366f1, #8b5cf6);
+    border-radius: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 30px;
+}
+
+.sidepanel-title {
+    font-size: 20px;
+    font-weight: 700;
+    color: #f1f5f9;
+}
+
+.sidepanel-version {
+    font-size: 12px;
+    color: #64748b;
+    margin-top: 2px;
+}
+
+/* Status */
+.sidepanel-status {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 18px 20px;
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 14px;
+    margin-bottom: 18px;
+}
+
+.status-label {
+    font-size: 12px;
+    font-weight: 600;
+    color: #64748b;
+    letter-spacing: 0.5px;
+}
+
+.status-value-wrap {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.status-dot {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background: #10b981;
+}
+
+.status-dot.running {
+    background: #f59e0b;
+    animation: pulse-dot 2s ease-in-out infinite;
+}
+
+@keyframes pulse-dot {
+
+    0%,
+    100% {
+        opacity: 1;
+    }
+
+    50% {
+        opacity: 0.5;
+    }
+}
+
+.status-text {
+    font-size: 15px;
+    font-weight: 600;
+    color: #f1f5f9;
+}
+
+/* Phase Row */
+.sidepanel-phase {
+    display: none;
+    align-items: center;
+    gap: 10px;
+    padding: 14px 20px;
+    background: rgba(99, 102, 241, 0.1);
+    border: 1px solid rgba(99, 102, 241, 0.2);
+    border-radius: 12px;
+    margin-bottom: 18px;
+}
+
+.phase-icon {
+    font-size: 22px;
+}
+
+.phase-text {
+    font-size: 15px;
+    font-weight: 600;
+    color: #a5b4fc;
+}
+
+/* Progress */
+.sidepanel-progress {
+    display: none;
+    padding: 16px 20px;
+    background: rgba(255, 255, 255, 0.02);
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    border-radius: 12px;
+    margin-bottom: 18px;
+}
+
+.sidepanel-progress.active {
+    display: block;
+}
+
+.progress-info {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.sidepanel-progress .progress-label {
+    font-size: 12px;
+    color: #64748b;
+}
+
+.sidepanel-progress .progress-count {
+    font-size: 14px;
+    font-weight: 600;
+    color: #f1f5f9;
+}
+
+.progress-bar-wrap {
+    width: 100%;
+    height: 8px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+.progress-bar-fill {
+    height: 100%;
+    background: linear-gradient(90deg, #6366f1, #8b5cf6);
+    border-radius: 10px;
+    transition: width 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Section */
+.sidepanel-section {
+    margin-bottom: 24px;
+}
+
+.section-label {
+    font-size: 12px;
+    font-weight: 600;
+    color: #64748b;
+    letter-spacing: 0.5px;
+    margin-bottom: 14px;
+}
+
+/* Mode Grid */
+.mode-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+}
+
+.mode-btn {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 16px 10px;
+    background: rgba(255, 255, 255, 0.03);
+    border: 2px solid rgba(255, 255, 255, 0.08);
+    border-radius: 12px;
+    color: #94a3b8;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.mode-btn:hover {
+    background: rgba(255, 255, 255, 0.06);
+    border-color: rgba(99, 102, 241, 0.3);
+    transform: translateY(-2px);
+}
+
+.mode-btn.active {
+    background: rgba(99, 102, 241, 0.15);
+    border-color: #6366f1;
+    color: #f1f5f9;
+}
+
+.mode-icon {
+    font-size: 28px;
+}
+
+.mode-label {
+    font-size: 13px;
+    font-weight: 600;
+}
+
+/* Action Buttons */
+.sidepanel-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin-bottom: 24px;
+}
+
+.action-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    padding: 18px 24px;
+    border: none;
+    border-radius: 14px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.action-btn.primary {
+    background: linear-gradient(135deg, #6366f1, #8b5cf6);
+    color: white;
+    box-shadow: 0 4px 20px rgba(99, 102, 241, 0.3);
+}
+
+.action-btn.primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 30px rgba(99, 102, 241, 0.4);
+}
+
+.action-btn.primary:active {
+    transform: translateY(0);
+}
+
+.action-btn.danger {
+    background: linear-gradient(135deg, #ef4444, #dc2626);
+    color: white;
+    box-shadow: 0 4px 20px rgba(239, 68, 68, 0.3);
+}
+
+.action-btn.danger:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 30px rgba(239, 68, 68, 0.4);
+}
+
+.action-btn.secondary {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    color: #94a3b8;
+}
+
+.action-btn.secondary:hover {
+    background: rgba(255, 255, 255, 0.08);
+    color: #f1f5f9;
+}
+
+.btn-icon {
+    font-size: 20px;
+}
+
+.btn-text {
+    font-size: 16px;
+}
+
+/* Stats */
+.sidepanel-stats {
+    display: flex;
+    justify-content: space-around;
+    padding: 20px;
+    background: rgba(255, 255, 255, 0.02);
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    border-radius: 14px;
+}
+
+.stat-item {
+    text-align: center;
+}
+
+.stat-value {
+    font-size: 32px;
+    font-weight: 700;
+    color: #f1f5f9;
+    margin-bottom: 6px;
+}
+
+.stat-label {
+    font-size: 11px;
+    font-weight: 600;
+    color: #64748b;
+    letter-spacing: 0.5px;
+}

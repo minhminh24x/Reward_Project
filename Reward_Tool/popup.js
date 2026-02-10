@@ -1,22 +1,16 @@
 /**
- * Popup Script - Rewards Ultra Pro v4.1
- * Premium UI Controller
+ * Popup Script - Rewards Ultra Pro v4.2
+ * Simplified UI Controller
  */
 
 document.addEventListener('DOMContentLoaded', () => {
-  // ============================================================
-  // ELEMENTS
-  // ============================================================
   const elements = {
-    statusValue: document.getElementById('statusValue'),
     statusDot: document.getElementById('statusDot'),
     statusText: document.getElementById('statusText'),
     phaseRow: document.getElementById('phaseRow'),
-    phaseBadge: document.getElementById('phaseBadge'),
     phaseIcon: document.getElementById('phaseIcon'),
     phaseText: document.getElementById('phaseText'),
     progressWrap: document.getElementById('progressWrap'),
-    progressLabel: document.getElementById('progressLabel'),
     progressCount: document.getElementById('progressCount'),
     progressFill: document.getElementById('progressFill'),
     modeBtns: document.querySelectorAll('.mode-btn'),
@@ -29,26 +23,22 @@ document.addEventListener('DOMContentLoaded', () => {
   };
 
   let currentMode = 'both';
-  let animationFrame = null;
 
-  // ============================================================
+  // ======================================================
   // UI UPDATE
-  // ============================================================
+  // ======================================================
   function updateUI(status) {
     if (status.isRunning) {
       // Running state
-      elements.statusValue.className = 'status-value running';
-      elements.statusDot.className = 'status-dot running';
+      elements.statusDot.classList.add('running');
       elements.statusText.textContent = 'Đang chạy...';
-
       elements.startBtn.style.display = 'none';
       elements.stopBtn.style.display = 'flex';
-
       elements.progressWrap.classList.add('active');
 
-      // Phase display
+      // Show phase
       if (status.phase) {
-        elements.phaseRow.style.display = 'block';
+        elements.phaseRow.style.display = 'flex';
         if (status.phase === 'PC') {
           elements.phaseIcon.textContent = '💻';
           elements.phaseText.textContent = 'PC Mode';
@@ -58,11 +48,11 @@ document.addEventListener('DOMContentLoaded', () => {
         }
       }
 
-      // Progress with animation
+      // Update progress
       const pct = status.totalTabs > 0
         ? Math.round((status.openedTabs / status.totalTabs) * 100)
         : 0;
-      animateProgressBar(pct);
+      elements.progressFill.style.width = pct + '%';
       elements.progressCount.textContent = `${status.openedTabs}/${status.totalTabs}`;
 
       // Disable mode buttons
@@ -73,13 +63,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
     } else {
       // Ready state
-      elements.statusValue.className = 'status-value ready';
-      elements.statusDot.className = 'status-dot ready';
+      elements.statusDot.classList.remove('running');
       elements.statusText.textContent = 'Sẵn sàng';
-
       elements.startBtn.style.display = 'flex';
       elements.stopBtn.style.display = 'none';
-
       elements.progressWrap.classList.remove('active');
       elements.phaseRow.style.display = 'none';
 
@@ -91,25 +78,9 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }
 
-  function animateProgressBar(targetPct) {
-    const current = parseFloat(elements.progressFill.style.width) || 0;
-    const diff = targetPct - current;
-
-    if (Math.abs(diff) < 0.5) {
-      elements.progressFill.style.width = targetPct + '%';
-      return;
-    }
-
-    const step = diff * 0.15;
-    elements.progressFill.style.width = (current + step) + '%';
-
-    if (animationFrame) cancelAnimationFrame(animationFrame);
-    animationFrame = requestAnimationFrame(() => animateProgressBar(targetPct));
-  }
-
-  // ============================================================
+  // ======================================================
   // STATUS POLLING
-  // ============================================================
+  // ======================================================
   function requestStatus() {
     chrome.runtime.sendMessage({ action: 'getStatus' }, (response) => {
       if (!chrome.runtime.lastError && response) {
@@ -121,9 +92,9 @@ document.addEventListener('DOMContentLoaded', () => {
   requestStatus();
   setInterval(requestStatus, 800);
 
-  // ============================================================
+  // ======================================================
   // MODE SELECTION
-  // ============================================================
+  // ======================================================
   async function loadSavedMode() {
     const data = await chrome.storage.local.get(['searchMode']);
     currentMode = data.searchMode || 'both';
@@ -132,17 +103,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
   function updateModeButtons() {
     elements.modeBtns.forEach(btn => {
-      const isActive = btn.dataset.mode === currentMode;
-      btn.classList.toggle('active', isActive);
+      btn.classList.toggle('active', btn.dataset.mode === currentMode);
     });
   }
 
   elements.modeBtns.forEach(btn => {
     btn.addEventListener('click', async () => {
-      // Add click animation
-      btn.style.transform = 'scale(0.95)';
-      setTimeout(() => btn.style.transform = '', 150);
-
       currentMode = btn.dataset.mode;
       await chrome.storage.local.set({ searchMode: currentMode });
       updateModeButtons();
@@ -151,25 +117,19 @@ document.addEventListener('DOMContentLoaded', () => {
 
   loadSavedMode();
 
-  // ============================================================
+  // ======================================================
   // ACTIONS
-  // ============================================================
+  // ======================================================
   elements.startBtn.addEventListener('click', () => {
-    // Button animation
-    elements.startBtn.style.transform = 'scale(0.95)';
-    setTimeout(() => elements.startBtn.style.transform = '', 150);
-
     chrome.runtime.sendMessage({ action: 'startWithMode', mode: currentMode }, () => {
       requestStatus();
     });
   });
 
   elements.stopBtn.addEventListener('click', () => {
-    elements.stopBtn.style.transform = 'scale(0.95)';
-    setTimeout(() => elements.stopBtn.style.transform = '', 150);
-
     chrome.runtime.sendMessage({ action: 'stopOpeningTabs' }, () => {
       elements.statusText.textContent = 'Đang dừng...';
+      setTimeout(requestStatus, 500);
     });
   });
 
@@ -177,9 +137,9 @@ document.addEventListener('DOMContentLoaded', () => {
     chrome.runtime.openOptionsPage();
   });
 
-  // ============================================================
+  // ======================================================
   // STATS
-  // ============================================================
+  // ======================================================
   async function loadStats() {
     const data = await chrome.storage.local.get(['runLogs']);
     const logs = data.runLogs || [];
@@ -190,7 +150,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const todayLogs = logs.filter(log => log.time >= today.getTime());
     const todayTotal = todayLogs.reduce((sum, log) => sum + (log.count || 0), 0);
 
-    // Animate counter
     animateValue(elements.todayCount, 0, todayTotal, 500);
 
     // Points estimation

@@ -535,7 +535,7 @@ async function generateKeywordsWithGemini(apiKey, count, topic) {
 // ============================================================
 // URL BUILDING
 // ============================================================
-function buildBingUrl(query) {
+function buildBingUrl(query, isMobile = false) {
     // Occasionally add typo (human-like)
     if (Math.random() < CONFIG.TYPO_CHANCE) {
         const pos = Math.floor(Math.random() * query.length);
@@ -547,22 +547,39 @@ function buildBingUrl(query) {
     const uniqueQuery = `${query} ${randHex(2)}`;
     const q = encodeURIComponent(uniqueQuery);
 
-    // Randomize form codes (different entry points)
-    const formCodes = ['QBLH', 'QBRE', 'HPCN', 'CHRN', 'ANNR', 'PERE'];
-    const form = pick(formCodes);
+    if (isMobile) {
+        // 📱 MOBILE URL - Based on real mobile device analysis
+        // Critical parameters for Microsoft Rewards mobile points:
+        // - PC=SANSAAND (identifies mobile search)
+        // - form=BABTAA (mobile form code)
+        const params = new URLSearchParams({
+            q: uniqueQuery,
+            PC: 'SANSAAND',              // ⭐ KEY: Mobile identifier
+            form: 'BABTAA',              // ⭐ KEY: Mobile form
+            cc: 'vn',                    // Country code
+            ssp: '1',                    // Search source parameter
+            safesearch: 'moderate',
+            setlang: 'vi'
+        });
 
-    // Build URL with varied parameters
-    const params = new URLSearchParams({
-        q: uniqueQuery,
-        form: form,
-        qs: pick(['HS', 'n', 'AS']),
-        sp: randInt(1, 9).toString(),
-        cvid: randHex(32),
-        pq: uniqueQuery.toLowerCase(),
-        sc: pick(['8-0', '6-0', '10-0'])
-    });
+        return `https://www.bing.com/search?${params.toString()}`;
+    } else {
+        // 💻 PC URL - Original logic
+        const formCodes = ['QBLH', 'QBRE', 'HPCN', 'CHRN', 'ANNR', 'PERE'];
+        const form = pick(formCodes);
 
-    return `https://www.bing.com/search?${params.toString()}`;
+        const params = new URLSearchParams({
+            q: uniqueQuery,
+            form: form,
+            qs: pick(['HS', 'n', 'AS']),
+            sp: randInt(1, 9).toString(),
+            cvid: randHex(32),
+            pq: uniqueQuery.toLowerCase(),
+            sc: pick(['8-0', '6-0', '10-0'])
+        });
+
+        return `https://www.bing.com/search?${params.toString()}`;
+    }
 }
 
 // ============================================================
@@ -654,7 +671,7 @@ async function runSearchSession(mode, count, settings) {
 
     // Create search tab
     const tab = await chrome.tabs.create({
-        url: buildBingUrl(keywords[0]),
+        url: buildBingUrl(keywords[0], isMobile),
         active: !settings.runInBackground,
         pinned: true
     });
@@ -671,17 +688,20 @@ async function runSearchSession(mode, count, settings) {
     // Initial human behavior
     await simulateHumanBehavior(searchTabId);
 
-    // Search loop
+    // Search loop with robust error handling
     let searchesSinceBreak = 0;
     let nextBreakAt = randInt(4, 8);
 
     for (let i = 1; i < keywords.length; i++) {
-        if (stopRequested) break;
+        // Check stop request
+        if (stopRequested) {
+            console.log(`⛔ Stop requested at search ${i}/${keywords.length}`);
+            break;
+        }
 
         // Determine delay
         let delay;
         if (searchesSinceBreak >= nextBreakAt) {
-            // Long break
             delay = randInt(CONFIG.LONG_BREAK_MIN, CONFIG.LONG_BREAK_MAX);
             searchesSinceBreak = 0;
             nextBreakAt = randInt(4, 8);
@@ -692,16 +712,30 @@ async function runSearchSession(mode, count, settings) {
         }
 
         await sleep(delay);
-        if (stopRequested) break;
+
+        // Check stop again after delay
+        if (stopRequested) {
+            console.log(`⛔ Stop requested during delay at ${i}/${keywords.length}`);
+            break;
+        }
+
 
         // Navigate to next search
         try {
-            await chrome.tabs.update(searchTabId, { url: buildBingUrl(keywords[i]) });
+            console.log(`🔍 Search ${i + 1}/${keywords.length}: ${keywords[i].substring(0, 30)}...`);
+
+            await chrome.tabs.update(searchTabId, { url: buildBingUrl(keywords[i], isMobile) });
             openedTabs++;
             sendStatus();
 
             // Wait for load
             await sleep(randInt(2500, 4000));
+
+            // Check stop again
+            if (stopRequested) {
+                console.log(`⛔ Stop requested after navigation at ${i}/${keywords.length}`);
+                break;
+            }
 
             // Re-inject and simulate behavior
             await injectAntiDetection(searchTabId, isMobile, deviceProfile);
@@ -709,13 +743,40 @@ async function runSearchSession(mode, count, settings) {
             await simulateHumanBehavior(searchTabId);
 
         } catch (e) {
-            console.error('Search error:', e.message);
-            break;
+            console.error(`❌ Search ${i} error:`, e.message);
+
+            // Try to recover by checking if tab still exists
+            try {
+                await chrome.tabs.get(searchTabId);
+                console.log('🔄 Tab still exists, continuing...');
+                // Continue to next iteration
+            } catch (tabError) {
+                console.error('💀 Tab lost, cannot continue session');
+                break;
+            }
         }
     }
 
-    // Close tab
-    try { await chrome.tabs.remove(searchTabId); } catch (e) { }
+    console.log(`✅ Search session completed: ${openedTabs}/${keywords.length} searches`);
+
+    // Auto-close tab with delay (configurable)
+    const autoCloseEnabled = settings.autoCloseTab !== false;
+    if (autoCloseEnabled && searchTabId) {
+        const closeDelay = settings.tabCloseDelay || 2000;
+        console.log(`🗑️ Closing tab in ${closeDelay / 1000}s...`);
+        await sleep(closeDelay);
+
+        try {
+            // Double-check tab exists before closing
+            await chrome.tabs.get(searchTabId);
+            await chrome.tabs.remove(searchTabId);
+            console.log('✅ Tab closed automatically');
+        } catch (e) {
+            console.log('ℹ️ Tab already closed or not found');
+        }
+    } else {
+        console.log('📌 Tab kept open (auto-close disabled)');
+    }
 
     // Log session
     const logEntry = {
@@ -828,6 +889,22 @@ chrome.runtime.onMessage.addListener((req, sender, sendResponse) => {
 
         case 'stopOpeningTabs':
             stopRequested = true;
+            console.log('🛑 Stop requested by user');
+
+            // Immediately close the search tab if it exists
+            if (searchTabId) {
+                chrome.tabs.remove(searchTabId).catch(() => {
+                    console.log('Tab already closed');
+                });
+                searchTabId = null;
+            }
+
+            // Reset state immediately
+            setTimeout(() => {
+                if (!isRunning) return; // Already reset
+                resetState();
+            }, 1000);
+
             sendResponse({ success: true });
             break;
 

@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Ultra Pro</title>
+    <link rel="stylesheet" href="sidepanel-styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+
+<body class="sidepanel-body">
+    <div class="sidepanel-container">
+        <!-- Header -->
+        <div class="sidepanel-header">
+            <div class="sidepanel-logo">
+                <div class="sidepanel-logo-icon">🎯</div>
+                <div class="sidepanel-logo-text">
+                    <div class="sidepanel-title">Ultra Pro</div>
+                    <div class="sidepanel-version">v2.3.1</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Status -->
+        <div class="sidepanel-status">
+            <div class="status-label">TRẠNG THÁI</div>
+            <div class="status-value-wrap">
+                <span class="status-dot" id="statusDot"></span>
+                <span class="status-text" id="statusText">Sẵn sàng</span>
+            </div>
+        </div>
+
+        <!-- Phase (only show when running) -->
+        <div class="sidepanel-phase" id="phaseRow" style="display: none;">
+            <span class="phase-icon" id="phaseIcon">💻</span>
+            <span class="phase-text" id="phaseText">PC Mode</span>
+        </div>
+
+        <!-- Progress (only show when running) -->
+        <div class="sidepanel-progress" id="progressWrap">
+            <div class="progress-info">
+                <div class="progress-label" id="progressLabel">Tiến độ</div>
+                <div class="progress-count" id="progressCount">0/0</div>
+            </div>
+            <div class="progress-bar-wrap">
+                <div class="progress-bar-fill" id="progressFill" style="width: 0%;"></div>
+            </div>
+        </div>
+
+        <!-- Search Mode Selection -->
+        <div class="sidepanel-section">
+            <div class="section-label">CHẾ ĐỘ TÌM KIẾM</div>
+            <div class="mode-grid">
+                <button class="mode-btn" data-mode="pc_only">
+                    <span class="mode-icon">💻</span>
+                    <span class="mode-label">PC Only</span>
+                </button>
+                <button class="mode-btn active" data-mode="both">
+                    <span class="mode-icon">🔄</span>
+                    <span class="mode-label">Both</span>
+                </button>
+                <button class="mode-btn" data-mode="mobile_only">
+                    <span class="mode-icon">📱</span>
+                    <span class="mode-label">Mobile</span>
+                </button>
+            </div>
+        </div>
+
+        <!-- Action Buttons -->
+        <div class="sidepanel-actions">
+            <button class="action-btn primary" id="startBtn">
+                <span class="btn-icon">🚀</span>
+                <span class="btn-text">Bắt đầu</span>
+            </button>
+            <button class="action-btn danger" id="stopBtn" style="display: none;">
+                <span class="btn-icon">⛔</span>
+                <span class="btn-text">Dừng lại</span>
+            </button>
+            <button class="action-btn secondary" id="optionsBtn">
+                <span class="btn-icon">⚙️</span>
+                <span class="btn-text">Cài đặt nâng cao</span>
+            </button>
+        </div>
+
+        <!-- Stats -->
+        <div class="sidepanel-stats">
+            <div class="stat-item">
+                <div class="stat-value" id="todayCount">0</div>
+                <div class="stat-label">HÔM NAY</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-value" id="pointsCount">0</div>
+                <div class="stat-label">ĐIỂM</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-value" id="streakCount">0</div>
+                <div class="stat-label">STREAK</div>
+            </div>
+        </div>
+    </div>
+
+    <script src="sidepanel.js"></script>
+</body>
+
+</html>

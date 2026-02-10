@@ -197,6 +197,33 @@
             <span class="input-hint">Max ~60 điểm (20 searches)</span>
           </div>
         </div>
+      </div>
+
+      <div class="card glass">
+        <h3>🗑️ Tự động đóng Tab</h3>
+        <div class="auto-close-setting">
+          <div class="setting-row">
+            <div class="setting-info">
+              <span class="setting-icon">🗑️</span>
+              <div>
+                <div class="setting-title">Tự động đóng tab sau khi hoàn thành</div>
+                <div class="setting-desc">Tab search sẽ tự đóng khi session kết thúc</div>
+              </div>
+            </div>
+            <label class="toggle">
+              <input type="checkbox" id="autoCloseTab" checked>
+              <span class="toggle-slider"></span>
+            </label>
+          </div>
+          <div class="input-group" id="closeDelayGroup">
+            <label>⏱️ Độ trễ trước khi đóng</label>
+            <div class="input-with-range">
+              <input type="range" id="tabCloseDelayRange" min="1" max="10" value="2">
+              <input type="number" id="tabCloseDelay" min="1" max="10" value="2">
+              <span class="delay-unit">giây</span>
+            </div>
+          </div>
+        </div>
         <button class="btn-save" id="saveSearchMode">💾 Lưu cài đặt</button>
       </div>
     </div>
